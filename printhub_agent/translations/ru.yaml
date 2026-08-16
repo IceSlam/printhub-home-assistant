@@ -1,0 +1,58 @@
+configuration:
+  server_url:
+    name: URL PrintHub Server
+    description: Публичный HTTPS URL сервера PrintHub.
+  ws_url:
+    name: WebSocket URL
+    description: WSS endpoint PrintHub Agent.
+  agent_token:
+    name: Токен агента
+    description: Должен полностью совпадать с AGENT_TOKEN на PrintHub Server.
+  agent_id:
+    name: ID агента
+    description: Уникальное имя этого печатного агента.
+  cups_server:
+    name: CUPS server
+    description: Для CUPS App на том же Home Assistant обычно 127.0.0.1:631.
+  cups_printer:
+    name: Очередь CUPS
+    description: Имя очереди принтера в CUPS, например XP365B.
+  printer_name:
+    name: Название принтера
+    description: Человекочитаемое имя, передаваемое в PrintHub.
+  print_dpi:
+    name: DPI
+    description: Разрешение принтера.
+  pdf_detect_tolerance_mm:
+    name: Допуск определения размера, мм
+    description: Допуск при автоматическом определении размера PDF.
+  cups_ready_timeout_seconds:
+    name: Ожидание CUPS, сек
+    description: Сколько ждать запуска CUPS перед ошибкой задания.
+  cups_health_interval_seconds:
+    name: Интервал проверки CUPS, сек
+    description: Частота фоновой проверки CUPS.
+  cups_print_retries:
+    name: Повторы печати
+    description: Число попыток при временной ошибке CUPS.
+  cups_print_retry_delay_seconds:
+    name: Задержка повтора, сек
+    description: Пауза между повторными попытками.
+  cups_wait_for_job:
+    name: Ждать завершения задания CUPS
+    description: Не считать задание успешным сразу после команды lp.
+  cups_job_timeout_seconds:
+    name: Таймаут задания, сек
+    description: Максимальное ожидание выхода задания из очереди CUPS.
+  cups_job_poll_ms:
+    name: Опрос задания, мс
+    description: Интервал проверки состояния задания CUPS.
+  ws_status_interval_seconds:
+    name: Heartbeat агента, сек
+    description: Интервал отправки статуса PrintHub.
+  ws_native_ping_seconds:
+    name: WebSocket ping, сек
+    description: Интервал нативного WebSocket ping.
+  ws_pong_timeout_seconds:
+    name: WebSocket pong timeout, сек
+    description: Через сколько секунд отсутствия pong переподключаться.

@@ -1,0 +1,57 @@
+name: PrintHub Agent
+version: "1.0.1"
+slug: printhub_agent
+description: PrintHub printing agent for Home Assistant OS and Supervised using an existing CUPS App
+url: https://print.iceslam.ru
+arch:
+  - aarch64
+  - amd64
+startup: application
+boot: auto
+init: false
+
+# The common Home Assistant CUPS Apps run on host_network and expose :631.
+# PrintHub Agent uses host networking only to reach that local CUPS endpoint.
+host_network: true
+
+options:
+  server_url: "https://print.iceslam.ru"
+  ws_url: "wss://print.iceslam.ru/ws/agent"
+  agent_token: ""
+  agent_id: "homeassistant-xp365b"
+  cups_server: "127.0.0.1:631"
+  cups_printer: "XP365B"
+  printer_name: "Xprinter XP-365B"
+  print_dpi: 203
+  pdf_detect_tolerance_mm: 3
+  cups_ready_timeout_seconds: 30
+  cups_health_interval_seconds: 15
+  cups_print_retries: 3
+  cups_print_retry_delay_seconds: 2
+  cups_wait_for_job: true
+  cups_job_timeout_seconds: 90
+  cups_job_poll_ms: 1500
+  ws_status_interval_seconds: 10
+  ws_native_ping_seconds: 10
+  ws_pong_timeout_seconds: 45
+
+schema:
+  server_url: url
+  ws_url: url
+  agent_token: password
+  agent_id: str
+  cups_server: str
+  cups_printer: str
+  printer_name: str
+  print_dpi: "int(100,1200)"
+  pdf_detect_tolerance_mm: "int(1,20)"
+  cups_ready_timeout_seconds: "int(5,300)"
+  cups_health_interval_seconds: "int(5,300)"
+  cups_print_retries: "int(1,10)"
+  cups_print_retry_delay_seconds: "int(1,30)"
+  cups_wait_for_job: bool
+  cups_job_timeout_seconds: "int(10,600)"
+  cups_job_poll_ms: "int(250,10000)"
+  ws_status_interval_seconds: "int(5,120)"
+  ws_native_ping_seconds: "int(5,120)"
+  ws_pong_timeout_seconds: "int(15,300)"

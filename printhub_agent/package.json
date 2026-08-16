@@ -1,0 +1,13 @@
+{
+  "name": "printhub-home-assistant-agent",
+  "version": "1.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/homeassistant-entrypoint.js"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5",
+    "ws": "^8.18.0"
+  }
+}

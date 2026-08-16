@@ -1,0 +1,19 @@
+configuration:
+  server_url:
+    name: PrintHub Server URL
+    description: Public HTTPS URL of the PrintHub server.
+  ws_url:
+    name: WebSocket URL
+    description: WSS endpoint used by the PrintHub Agent.
+  agent_token:
+    name: Agent token
+    description: Must match AGENT_TOKEN on PrintHub Server.
+  agent_id:
+    name: Agent ID
+    description: Unique name for this print agent.
+  cups_server:
+    name: CUPS server
+    description: For a CUPS App on the same Home Assistant, normally 127.0.0.1:631.
+  cups_printer:
+    name: CUPS queue
+    description: Printer queue name in CUPS, for example XP365B.
