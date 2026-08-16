@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0
+- Embedded PrintHub Agent upgraded to 1.5.0.
+- Added local read-only status API on `127.0.0.1:35994`.
+- Exposes WebSocket/server connection state, CUPS health, current job and queue.
+- Added telemetry timestamps for server connection, messages and pong.
+- Designed for the bundled Home Assistant PrintHub custom integration.
+
 ## 1.0.1
 - Prepared a clean GitHub repository distribution.
 - Repository metadata is now expected at the Git repository root.

@@ -56,3 +56,9 @@ configuration:
   ws_pong_timeout_seconds:
     name: WebSocket pong timeout, сек
     description: Через сколько секунд отсутствия pong переподключаться.
+  status_host:
+    name: Адрес локального API
+    description: Оставьте 127.0.0.1, чтобы API был доступен только Home Assistant на этом хосте.
+  status_port:
+    name: Порт локального API
+    description: Порт, с которого интеграция PrintHub получает состояние агента.

@@ -17,3 +17,9 @@ configuration:
   cups_printer:
     name: CUPS queue
     description: Printer queue name in CUPS, for example XP365B.
+  status_host:
+    name: Local API host
+    description: Keep 127.0.0.1 so the API is available only to Home Assistant on this host.
+  status_port:
+    name: Local API port
+    description: Port used by the PrintHub integration to read agent status.

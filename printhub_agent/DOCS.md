@@ -155,3 +155,21 @@ and restart PrintHub Agent.
 
 Do not enable `usb: true`, `full_access`, Docker API, Supervisor API, or Home Assistant API
 for this App. The CUPS App already owns the printer.
+
+
+## Home Assistant integration status API
+
+Starting with App 1.1.0 the Agent exposes a local, read-only status API.
+
+Default endpoint:
+
+```text
+http://127.0.0.1:35994/status
+```
+
+It contains WebSocket/server connection state, CUPS health, queue availability,
+current PrintHub job, queued jobs, last print transport and Agent version.
+
+Keep `status_host` set to `127.0.0.1` unless you intentionally need to expose this
+diagnostic API to the LAN. The bundled Home Assistant custom integration uses this
+endpoint directly.

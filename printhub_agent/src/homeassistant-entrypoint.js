@@ -53,6 +53,8 @@ if (!agentToken) {
 
 const cupsServer = str(options.cups_server, '127.0.0.1:631');
 const cupsPrinter = str(options.cups_printer, 'XP365B');
+const statusHost = str(options.status_host, '127.0.0.1');
+const statusPort = int(options.status_port, 35994, 1024, 65535);
 
 Object.assign(process.env, {
   SERVER_URL: serverUrl,
@@ -93,6 +95,7 @@ console.log(new Date().toISOString(), 'Home Assistant PrintHub Agent bootstrap',
   cupsServer: process.env.CUPS_SERVER,
   cupsPrinter: process.env.CUPS_PRINTER,
   cupsWaitForJob: process.env.CUPS_WAIT_FOR_JOB,
+  statusEndpoint: `http://${statusHost}:${statusPort}/status`,
 });
 
 // Probe is informative only. The shared agent keeps retrying if CUPS starts later.
@@ -119,4 +122,68 @@ await new Promise(resolve => {
   );
 });
 
-await import('./agent.js');
+const agentModule = await import('./agent.js');
+
+const { createServer } = await import('node:http');
+
+const statusServer = createServer(async (req, res) => {
+  const requestUrl = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
+
+  res.setHeader('content-type', 'application/json; charset=utf-8');
+  res.setHeader('cache-control', 'no-store');
+
+  if (req.method !== 'GET') {
+    res.statusCode = 405;
+    res.end(JSON.stringify({ ok: false, error: 'method_not_allowed' }));
+    return;
+  }
+
+  if (requestUrl.pathname === '/health') {
+    const status = agentModule.getAgentStatusSnapshot();
+    res.statusCode = 200;
+    res.end(JSON.stringify({
+      ok: true,
+      ready: Boolean(
+        status.serverConnected
+        && status.cupsSchedulerRunning
+        && status.cupsQueueUsbExists
+      ),
+      agentId: status.agentId,
+      version: status.version,
+    }));
+    return;
+  }
+
+  if (requestUrl.pathname === '/status') {
+    const refresh = requestUrl.searchParams.get('refresh') === '1';
+    const status = refresh
+      ? await agentModule.refreshAgentStatusSnapshot()
+      : agentModule.getAgentStatusSnapshot();
+
+    res.statusCode = 200;
+    res.end(JSON.stringify({
+      ok: true,
+      generatedAt: new Date().toISOString(),
+      agent: status,
+    }));
+    return;
+  }
+
+  res.statusCode = 404;
+  res.end(JSON.stringify({ ok: false, error: 'not_found' }));
+});
+
+statusServer.on('error', error => {
+  console.error(new Date().toISOString(), 'PrintHub local status API error', {
+    host: statusHost,
+    port: statusPort,
+    error: error?.message || String(error),
+  });
+});
+
+statusServer.listen(statusPort, statusHost, () => {
+  console.log(new Date().toISOString(), 'PrintHub local status API listening', {
+    url: `http://${statusHost}:${statusPort}/status`,
+  });
+});
+
