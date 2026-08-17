@@ -101,6 +101,11 @@ let lastCupsHealth = {
 };
 
 let activeWs = null;
+let serverConnectedAt = null;
+let serverDisconnectedAt = null;
+let serverLastMessageAt = null;
+let serverLastPongAt = null;
+let serverLastError = null;
 let reconnectTimer = null;
 let jobQueueRunning = false;
 let activeJobId = null;
@@ -910,8 +915,25 @@ function statusPayload(type = 'agent:status') {
     busy: Boolean(activeJobId),
     activeJobId: activeJobId || null,
     queuedJobs: jobQueue.length,
-    version: '1.4.0',
+    serverUrl: SERVER_URL,
+    wsUrl: WS_URL,
+    serverConnected: Boolean(activeWs && activeWs.readyState === WebSocket.OPEN),
+    serverConnectedAt,
+    serverDisconnectedAt,
+    serverLastMessageAt,
+    serverLastPongAt,
+    serverLastError,
+    version: '1.5.1',
   };
+}
+
+export function getAgentStatusSnapshot() {
+  return statusPayload('local:status');
+}
+
+export async function refreshAgentStatusSnapshot() {
+  await refreshCupsHealth({ logChanges: false });
+  return statusPayload('local:status');
 }
 
 function sendOn(ws, payload) {
@@ -1063,6 +1085,9 @@ function connect() {
   ws.on('open', () => {
     activeWs = ws;
     lastPongAt = Date.now();
+    serverConnectedAt = new Date().toISOString();
+    serverLastPongAt = serverConnectedAt;
+    serverLastError = null;
 
     log('connected');
     sendOn(ws, statusPayload('agent:hello'));
@@ -1103,9 +1128,11 @@ function connect() {
 
   ws.on('pong', () => {
     lastPongAt = Date.now();
+    serverLastPongAt = new Date().toISOString();
   });
 
   ws.on('message', data => {
+    serverLastMessageAt = new Date().toISOString();
     let message;
     try {
       message = JSON.parse(data.toString());
@@ -1126,6 +1153,7 @@ function connect() {
   ws.on('close', (code, reason) => {
     clearSocketTimers();
     if (activeWs === ws) activeWs = null;
+    serverDisconnectedAt = new Date().toISOString();
 
     log('websocket closed', {
       code,
@@ -1147,6 +1175,7 @@ function connect() {
   });
 
   ws.on('error', error => {
+    serverLastError = error?.message || String(error);
     log('websocket error', {
       message: error?.message,
       code: error?.code,

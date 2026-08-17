@@ -1,5 +1,5 @@
 name: PrintHub Agent
-version: "1.1.1"
+version: "1.1.2"
 slug: printhub_agent
 description: PrintHub printing agent for Home Assistant OS and Supervised using an existing CUPS App
 url: https://print.iceslam.ru

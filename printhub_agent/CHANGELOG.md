@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.2
+- Исправлено падение локального status API: `getAgentStatusSnapshot is not a function`.
+- `agent.js` теперь экспортирует `getAgentStatusSnapshot()` и `refreshAgentStatusSnapshot()`, которые вызывает Home Assistant entrypoint.
+- Добавлены telemetry-поля `serverConnected`, `serverConnectedAt`, `serverDisconnectedAt`, `serverLastMessageAt`, `serverLastPongAt`, `serverLastError`.
+- Agent core version обновлена до 1.5.1.
+- Печать через CUPS и профили 58×40 / 58×60 / 75×120 не изменялись.
+
 ## 1.1.0
 - Embedded PrintHub Agent upgraded to 1.5.0.
 - Added local read-only status API on `127.0.0.1:35994`.
