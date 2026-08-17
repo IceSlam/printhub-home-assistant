@@ -101,11 +101,6 @@ let lastCupsHealth = {
 };
 
 let activeWs = null;
-let serverConnectedAt = null;
-let serverDisconnectedAt = null;
-let serverLastMessageAt = null;
-let serverLastPongAt = null;
-let serverLastError = null;
 let reconnectTimer = null;
 let jobQueueRunning = false;
 let activeJobId = null;
@@ -119,6 +114,7 @@ const terminalOutbox = [];
 const CUPS_PAGE_SIZES = {
   '58x40': process.env.CUPS_PAGE_SIZE_58X40 || process.env.CUPS_MEDIA_58X40 || 'w5.8h4',
   '40x58': process.env.CUPS_PAGE_SIZE_40X58 || process.env.CUPS_MEDIA_40X58 || 'w4h5.8',
+  '58x60': process.env.CUPS_PAGE_SIZE_58X60 || process.env.CUPS_MEDIA_58X60 || 'w5.8h6',
   '75x120': process.env.CUPS_PAGE_SIZE_75X120 || process.env.CUPS_MEDIA_75X120 || 'w7.5h12',
   '120x75': process.env.CUPS_PAGE_SIZE_120X75 || process.env.CUPS_MEDIA_120X75 || 'w12h7.5',
 };
@@ -137,6 +133,13 @@ const PRESETS = {
     widthPx: 320,
     heightPx: 464,
     cupsPageSize: CUPS_PAGE_SIZES['40x58'],
+  },
+  '58x60': {
+    widthMm: 58,
+    heightMm: 60,
+    widthPx: 464,
+    heightPx: 480,
+    cupsPageSize: CUPS_PAGE_SIZES['58x60'],
   },
   '75x120': {
     widthMm: 75,
@@ -228,6 +231,7 @@ function isPdfJob(job, buffer) {
 function presetByExactSize(widthMm, heightMm) {
   if (close(widthMm, 58) && close(heightMm, 40)) return { name: '58x40', ...PRESETS['58x40'], detectedWidthMm: widthMm, detectedHeightMm: heightMm };
   if (close(widthMm, 40) && close(heightMm, 58)) return { name: '40x58', ...PRESETS['40x58'], detectedWidthMm: widthMm, detectedHeightMm: heightMm };
+  if (close(widthMm, 58) && close(heightMm, 60)) return { name: '58x60', ...PRESETS['58x60'], detectedWidthMm: widthMm, detectedHeightMm: heightMm };
   if (close(widthMm, 75) && close(heightMm, 120)) return { name: '75x120', ...PRESETS['75x120'], detectedWidthMm: widthMm, detectedHeightMm: heightMm };
   if (close(widthMm, 120) && close(heightMm, 75)) return { name: '120x75', ...PRESETS['120x75'], detectedWidthMm: widthMm, detectedHeightMm: heightMm };
   return null;
@@ -241,6 +245,13 @@ function presetByRatio(widthMm, heightMm) {
     return widthMm >= heightMm
       ? { name: '58x40', ...PRESETS['58x40'], detectedWidthMm: widthMm, detectedHeightMm: heightMm }
       : { name: '40x58', ...PRESETS['40x58'], detectedWidthMm: widthMm, detectedHeightMm: heightMm };
+  }
+
+  // 60/58 ≈ 1.03
+  if (ratio >= 1.0 && ratio <= 1.10) {
+    return widthMm >= heightMm
+      ? { name: '58x60', ...PRESETS['58x60'], detectedWidthMm: widthMm, detectedHeightMm: heightMm }
+      : { name: '58x60', ...PRESETS['58x60'], detectedWidthMm: heightMm, detectedHeightMm: widthMm };
   }
 
   // 120/75 = 1.60
@@ -343,7 +354,7 @@ async function detectPdfPreset(buffer, job = {}) {
 
     throw new Error(
       `Cannot confidently detect label size from PDF ${detected.source}: ${detected.widthMm.toFixed(2)}x${detected.heightMm.toFixed(2)} mm. ` +
-      'Supported sizes: 58x40, 40x58, 75x120, 120x75.'
+      'Supported sizes: 58x40, 40x58, 58x60, 75x120, 120x75.'
     );
   } finally {
     await fs.rm(dir, { recursive: true, force: true });
@@ -398,13 +409,17 @@ async function detectImagePreset(buffer, job = {}) {
       : { name: '40x58', ...PRESETS['40x58'] };
   }
 
+  if (ratio >= 1.0 && ratio <= 1.10) {
+    return { name: '58x60', ...PRESETS['58x60'] };
+  }
+
   if (ratio >= 1.52 && ratio <= 1.72) {
     return metadata.width >= metadata.height
       ? { name: '120x75', ...PRESETS['120x75'] }
       : { name: '75x120', ...PRESETS['75x120'] };
   }
 
-  throw new Error(`Cannot confidently detect image label size: ${metadata.width}x${metadata.height}px. Supported sizes: 58x40, 40x58, 75x120, 120x75.`);
+  throw new Error(`Cannot confidently detect image label size: ${metadata.width}x${metadata.height}px. Supported sizes: 58x40, 40x58, 58x60, 75x120, 120x75.`);
 }
 
 async function imageToTspl(buffer, job, presetOverride = null) {
@@ -895,29 +910,8 @@ function statusPayload(type = 'agent:status') {
     busy: Boolean(activeJobId),
     activeJobId: activeJobId || null,
     queuedJobs: jobQueue.length,
-    serverUrl: SERVER_URL,
-    wsUrl: WS_URL,
-    serverConnected: Boolean(activeWs && activeWs.readyState === WebSocket.OPEN),
-    serverConnectedAt,
-    serverDisconnectedAt,
-    serverLastMessageAt,
-    serverLastPongAt,
-    serverLastError,
-    version: '1.5.0',
+    version: '1.4.0',
   };
-}
-
-export function getAgentStatusSnapshot() {
-  return statusPayload('local:status');
-}
-
-export async function refreshAgentStatusSnapshot() {
-  try {
-    await refreshCupsHealth();
-  } catch (error) {
-    serverLastError = serverLastError || String(error?.message || error);
-  }
-  return statusPayload('local:status');
 }
 
 function sendOn(ws, payload) {
@@ -1069,9 +1063,6 @@ function connect() {
   ws.on('open', () => {
     activeWs = ws;
     lastPongAt = Date.now();
-    serverConnectedAt = new Date().toISOString();
-    serverLastPongAt = serverConnectedAt;
-    serverLastError = null;
 
     log('connected');
     sendOn(ws, statusPayload('agent:hello'));
@@ -1112,11 +1103,9 @@ function connect() {
 
   ws.on('pong', () => {
     lastPongAt = Date.now();
-    serverLastPongAt = new Date().toISOString();
   });
 
   ws.on('message', data => {
-    serverLastMessageAt = new Date().toISOString();
     let message;
     try {
       message = JSON.parse(data.toString());
@@ -1137,7 +1126,6 @@ function connect() {
   ws.on('close', (code, reason) => {
     clearSocketTimers();
     if (activeWs === ws) activeWs = null;
-    serverDisconnectedAt = new Date().toISOString();
 
     log('websocket closed', {
       code,
@@ -1159,7 +1147,6 @@ function connect() {
   });
 
   ws.on('error', error => {
-    serverLastError = error?.message || String(error);
     log('websocket error', {
       message: error?.message,
       code: error?.code,
