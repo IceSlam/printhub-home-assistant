@@ -1,0 +1,65 @@
+#!/bin/sh
+set -eu
+
+# CUPS calls backends without arguments during discovery.
+if [ "$#" -eq 0 ]; then
+  exit 0
+fi
+
+if [ "$#" -lt 5 ]; then
+  echo "ERROR: printhubproxy: invalid CUPS backend invocation" >&2
+  exit 1
+fi
+
+JOB_ID="$1"
+USER_NAME="$2"
+TITLE="$3"
+COPIES="$4"
+OPTIONS="$5"
+INPUT_FILE="${6:-}"
+DEVICE_URI="${DEVICE_URI:-printhubproxy:/XP365B/w5.8h4}"
+
+TARGET="${DEVICE_URI#printhubproxy:}"
+TARGET="${TARGET#/}"
+QUEUE="${TARGET%%/*}"
+PAGE_SIZE="${TARGET#*/}"
+
+if [ -z "$QUEUE" ] || [ "$QUEUE" = "$TARGET" ]; then
+  QUEUE="XP365B"
+fi
+if [ -z "$PAGE_SIZE" ] || [ "$PAGE_SIZE" = "$TARGET" ]; then
+  PAGE_SIZE="w5.8h4"
+fi
+
+TMP="$(mktemp --suffix=.pdf /tmp/printhub-airprint-XXXXXX)"
+trap 'rm -f "$TMP"' EXIT INT TERM
+
+if [ -n "$INPUT_FILE" ] && [ -f "$INPUT_FILE" ]; then
+  cp "$INPUT_FILE" "$TMP"
+else
+  cat > "$TMP"
+fi
+
+if [ ! -s "$TMP" ]; then
+  echo "ERROR: printhubproxy: empty PDF received" >&2
+  exit 1
+fi
+
+# Submit to the internal multi-size queue. This keeps a single USB owner and
+# prevents the AirPrint queue and PrintHub Agent queue from opening USB at the
+# same time.
+RESULT="$(lp \
+  -d "$QUEUE" \
+  -n "${COPIES:-1}" \
+  -t "$TITLE" \
+  -o "PageSize=$PAGE_SIZE" \
+  -o "media=$PAGE_SIZE" \
+  -o fit-to-page \
+  -o print-scaling=fit \
+  "$TMP" 2>&1)" || {
+    echo "ERROR: printhubproxy: failed to submit to $QUEUE: $RESULT" >&2
+    exit 1
+  }
+
+echo "INFO: printhubproxy: AirPrint job $JOB_ID forwarded to $QUEUE ($PAGE_SIZE): $RESULT" >&2
+exit 0

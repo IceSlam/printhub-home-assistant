@@ -1,0 +1,76 @@
+{
+  "entity": {
+    "binary_sensor": {
+      "agent_server_connection": {
+        "default": "mdi:cloud-check-outline"
+      },
+      "cups_scheduler": {
+        "default": "mdi:printer-check"
+      },
+      "cups_queue": {
+        "default": "mdi:printer-pos-check"
+      },
+      "busy": {
+        "default": "mdi:printer-eye"
+      },
+      "server_health": {
+        "default": "mdi:server-network"
+      },
+      "usb_printer_connected": {
+        "default": "mdi:usb-port"
+      },
+      "main_queue_enabled": {
+        "default": "mdi:printer"
+      },
+      "main_queue_accepting": {
+        "default": "mdi:tray-arrow-down"
+      },
+      "airprint_ready": {
+        "default": "mdi:cast-connected"
+      },
+      "cups_sharing": {
+        "default": "mdi:share-variant"
+      },
+      "cups_web_interface": {
+        "default": "mdi:web"
+      }
+    },
+    "sensor": {
+      "app_version": {
+        "default": "mdi:package-variant-closed-check"
+      },
+      "airprint_profile": {
+        "default": "mdi:label-outline"
+      },
+      "usb_uri": {
+        "default": "mdi:usb"
+      },
+      "default_media": {
+        "default": "mdi:label-multiple-outline"
+      },
+      "darkness": {
+        "default": "mdi:contrast"
+      },
+      "print_speed": {
+        "default": "mdi:speedometer"
+      },
+      "gap_mm": {
+        "default": "mdi:arrow-expand-vertical"
+      },
+      "webui_port": {
+        "default": "mdi:web-box"
+      }
+    },
+    "button": {
+      "refresh_status": {
+        "default": "mdi:refresh"
+      },
+      "test_print": {
+        "default": "mdi:printer-check"
+      },
+      "purge_queue": {
+        "default": "mdi:delete-sweep-outline"
+      }
+    }
+  }
+}

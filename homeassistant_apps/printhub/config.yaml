@@ -1,0 +1,109 @@
+name: PrintHub
+version: "2.2.19"
+slug: printhub
+description: All-in-one PrintHub Agent + CUPS + AirPrint with modern web administration
+url: https://print.iceslam.ru
+arch:
+  - aarch64
+  - amd64
+startup: services
+boot: auto
+init: false
+host_network: true
+host_dbus: true
+usb: true
+udev: true
+apparmor: false
+ingress: true
+ingress_port: 8099
+panel_icon: mdi:printer-pos-check
+panel_title: PrintHub
+webui: "http://[HOST]:[PORT:8099]"
+ports:
+  631/tcp: 631
+ports_description:
+  631/tcp: CUPS / IPP / AirPrint
+
+options:
+  admin_username: "admin"
+  admin_password: "admin"
+
+  server_url: "https://print.iceslam.ru"
+  ws_url: "wss://print.iceslam.ru/ws/agent"
+  agent_token: ""
+  agent_id: "homeassistant-xp365b"
+
+  main_queue: "XP365B"
+  printer_display_name: "Xprinter XP-365B"
+  usb_uri: ""
+  share_main_queue: false
+
+  airprint_enabled: true
+  airprint_queue: "XP365B_AirPrint"
+  airprint_display_name: "Xprinter XP-365B 58x40"
+  airprint_size: "58x40"
+
+  default_page_size: "58x40"
+  darkness: 15
+  print_speed: 12
+  gap_mm: 3
+
+  print_dpi: 203
+  pdf_detect_tolerance_mm: 3
+  cups_ready_timeout_seconds: 30
+  cups_health_interval_seconds: 15
+  cups_print_retries: 3
+  cups_print_retry_delay_seconds: 2
+  cups_wait_for_job: true
+  cups_job_timeout_seconds: 90
+  cups_job_poll_ms: 1500
+
+  ws_status_interval_seconds: 10
+  ws_native_ping_seconds: 10
+  ws_pong_timeout_seconds: 45
+
+  status_host: "127.0.0.1"
+  status_port: 35994
+  web_port: 8099
+
+schema:
+  admin_username: str
+  admin_password: password
+
+  server_url: url
+  ws_url: url
+  agent_token: password
+  agent_id: str
+
+  main_queue: str
+  printer_display_name: str
+  usb_uri: str
+  share_main_queue: bool
+
+  airprint_enabled: bool
+  airprint_queue: str
+  airprint_display_name: str
+  airprint_size: str
+
+  default_page_size: str
+  darkness: "int(0,15)"
+  print_speed: "int(1,12)"
+  gap_mm: "int(0,10)"
+
+  print_dpi: "int(100,1200)"
+  pdf_detect_tolerance_mm: "int(1,20)"
+  cups_ready_timeout_seconds: "int(5,300)"
+  cups_health_interval_seconds: "int(5,300)"
+  cups_print_retries: "int(1,10)"
+  cups_print_retry_delay_seconds: "int(1,30)"
+  cups_wait_for_job: bool
+  cups_job_timeout_seconds: "int(10,600)"
+  cups_job_poll_ms: "int(250,10000)"
+
+  ws_status_interval_seconds: "int(5,120)"
+  ws_native_ping_seconds: "int(5,120)"
+  ws_pong_timeout_seconds: "int(15,300)"
+
+  status_host: str
+  status_port: "int(1024,65535)"
+  web_port: "int(1024,65535)"

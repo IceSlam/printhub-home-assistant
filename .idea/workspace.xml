@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0db217c5-4a23-4c99-a1e3-86fb78336395" name="Changes" comment="Prepaired for Integration">
+      <change afterPath="$PROJECT_DIR$/.env.agent.example" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/XP-365B-120x75-AirPrint.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/XP-365B-40x58-AirPrint.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/XP-365B-58x40-AirPrint.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/XP-365B-58x60-AirPrint.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/XP-365B-75x120-AirPrint.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/XP-365B.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/src/agent.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.agent.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/nginx.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/printhub-agent.service" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/CHANGELOG.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/DOCS.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/THIRD_PARTY_NOTICES.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/config.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/icon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/rootfs/usr/lib/cups/backend/printhubproxy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/rootfs/usr/lib/cups/filter/printhub-pdf-pass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/rootfs/usr/lib/cups/filter/printhub-tspl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/rootfs/usr/share/cups/model/printhub/XP-365B-120x75-AirPrint.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/rootfs/usr/share/cups/model/printhub/XP-365B-40x58-AirPrint.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/rootfs/usr/share/cups/model/printhub/XP-365B-58x40-AirPrint.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/rootfs/usr/share/cups/model/printhub/XP-365B-58x60-AirPrint.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/rootfs/usr/share/cups/model/printhub/XP-365B-75x120-AirPrint.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/rootfs/usr/share/cups/model/printhub/XP-365B.ppd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/run.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/src/agent.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/src/cups-manager.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/src/homeassistant-combo-entrypoint.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/translations/en.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/translations/ru-RU.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/translations/ru.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/web/app-icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/web/app-icon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/web/app-select.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/web/app-select.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/web/app.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/web/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/printhub/web/styles.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_apps/repository.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/CHANGELOG.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/brand/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/brand/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/binary_sensor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/brand/dark_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/brand/dark_icon@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/brand/dark_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/brand/dark_logo@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/brand/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/brand/icon@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/brand/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/brand/logo@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/button.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/config_flow.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/const.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/coordinator.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/diagnostics.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/entity.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/icons.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/sensor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/strings.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/translations/en.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/custom_components/printhub/translations/ru.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homeassistant_integration/hacs.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/host/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/host/setup-orange-pi.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mock_server.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/samples/test-label.tspl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/assets/printhub-logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/assets/printhub-logo.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/marketplaces/common.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/marketplaces/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/marketplaces/ozon.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/marketplaces/wb.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/marketplaces/yandex.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/telegram-auth.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/public/printhub-logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/public/printhub-logo.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/App.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/AgentAccordion.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/AgentStatusModal.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/AuthGate.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/CopyStepper.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/FaIcon.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/HistoryPanel.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/LocalFiles.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/ManualUpload.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/NotificationStack.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/PrintableList.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/SmoothCollapse.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/components/ToggleSwitch.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/composables/usePrintHubApi.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/main.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/styles.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/src/utils/modalScrollLock.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/webapp/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/printhub_agent/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/printhub_agent/DOCS.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/printhub_agent/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/printhub_agent/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/printhub_agent/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/printhub_agent/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/printhub_agent/src/agent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/printhub_agent/src/homeassistant-entrypoint.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/printhub_agent/translations/en.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/printhub_agent/translations/ru.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/repository.yaml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <execution>
+        <execution>
+          <execution>
+            <execution>
+              <execution />
+            </execution>
+          </execution>
+        </execution>
+      </execution>
+    </execution>
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="19" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;IceSlam&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/IceSlam/printhub-home-assistant.git&quot;,
+    &quot;accountId&quot;: &quot;0e136769-fb95-4a87-a909-3fdd2b5bcf95&quot;
+  }
+}</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0087994286172342" />
+      <entry key="MS500" value="1.5652777634984103" />
+      <entry key="S2" value="2.9612433095561004" />
+      <entry key="S5" value="4.122031005349752" />
+      <entry key="S10" value="4.869784121701164" />
+      <entry key="S30" value="5.567935145681272" />
+      <entry key="S60" value="5.776042092444202" />
+      <entry key="M2" value="5.88595446799862" />
+      <entry key="M5" value="5.953874462420443" />
+      <entry key="M10" value="5.976851712644945" />
+      <entry key="M15" value="5.9845487321780375" />
+      <entry key="M30" value="5.992264809864902" />
+      <entry key="H1" value="5.996130012476756" />
+      <entry key="H2" value="5.998064407698947" />
+      <entry key="H4" value="5.999032054161393" />
+      <entry key="D1" value="5.999838654899036" />
+      <entry key="W1" value="5.9999769501905496" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9348557869287313" />
+      <entry key="MS500" value="1.5434151380659096" />
+      <entry key="S2" value="2.9470602088307216" />
+      <entry key="S5" value="4.106888616443364" />
+      <entry key="S10" value="4.858060991906089" />
+      <entry key="S30" value="5.562589885452179" />
+      <entry key="S60" value="5.773145288775277" />
+      <entry key="M2" value="5.884446092699959" />
+      <entry key="M5" value="5.953256187275926" />
+      <entry key="M10" value="5.976540042052248" />
+      <entry key="M15" value="5.984340385472954" />
+      <entry key="M30" value="5.992160352498888" />
+      <entry key="H1" value="5.996077712629003" />
+      <entry key="H2" value="5.998038239963675" />
+      <entry key="H4" value="5.9990189658383795" />
+      <entry key="D1" value="5.9998364728928495" />
+      <entry key="W1" value="5.999976638460218" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3I1E2FJkbUtWBfjYvt7w8xgVyRL" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ssh.settings&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-PS-262.9437.196" />
+        <option value="bundled-php-predefined-a98d8de5180a-9522f28f0b20-com.jetbrains.php.sharedIndexes-PS-262.9437.196" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0db217c5-4a23-4c99-a1e3-86fb78336395" name="Changes" comment="" />
+      <created>1786923465432</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1786923465432</updated>
+      <workItem from="1786923466604" duration="3233000" />
+    </task>
+    <task id="LOCAL-00001" summary="Prepaired for Integration">
+      <option name="closed" value="true" />
+      <created>1786923533573</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1786923533573</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Prepaired for Integration">
+      <option name="closed" value="true" />
+      <created>1787000500664</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1787000500664</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Prepaired for Integration">
+      <option name="closed" value="true" />
+      <created>1787000553539</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1787000553539</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Prepaired for Integration">
+      <option name="closed" value="true" />
+      <created>1787002261627</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1787002261627</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Prepaired for Integration" />
+    <option name="LAST_COMMIT_MESSAGE" value="Prepaired for Integration" />
+  </component>
+</project>

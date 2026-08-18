@@ -1,0 +1,274 @@
+#!/usr/bin/env python3
+"""PrintHub CUPS filter: PDF -> monochrome TSPL bitmap for Xprinter XP-365B.
+
+The PPD asks cups-filters/pdftopdf to perform page fitting first. This filter
+renders the resulting PDF at 203 DPI with Poppler, normalizes the bitmap to the
+selected label size and emits TSPL/TSPL2 directly. It uses only the Python
+standard library plus the `pdftoppm` utility from poppler-utils.
+"""
+
+from __future__ import annotations
+
+import os
+import re
+import signal
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+signal.signal(signal.SIGPIPE, signal.SIG_IGN)
+
+DPI = 203
+
+PRESETS = {
+    "w5.8h4": (58.0, 40.0),
+    "w4h5.8": (40.0, 58.0),
+    "w5.8h6": (58.0, 60.0),
+    "w7.5h12": (75.0, 120.0),
+    "w12h7.5": (120.0, 75.0),
+    "Label58x40": (58.0, 40.0),
+    "Label40x58": (40.0, 58.0),
+    "Label58x60": (58.0, 60.0),
+    "Label75x120": (75.0, 120.0),
+    "Label120x75": (120.0, 75.0),
+}
+
+
+def info(message: str) -> None:
+    sys.stderr.write(f"INFO: [printhub-tspl] {message}\n")
+    sys.stderr.flush()
+
+
+def error(message: str) -> None:
+    sys.stderr.write(f"ERROR: [printhub-tspl] {message}\n")
+    sys.stderr.flush()
+
+
+def mm_to_dots(mm: float) -> int:
+    return max(1, round(mm * DPI / 25.4))
+
+
+def parse_options(raw: str) -> dict[str, str]:
+    result: dict[str, str] = {}
+    # CUPS option values used here contain no spaces; shlex is unnecessary.
+    for item in raw.split():
+        if "=" in item:
+            key, value = item.split("=", 1)
+            result[key] = value
+        else:
+            result[item] = "true"
+    return result
+
+
+def int_option(options: dict[str, str], name: str, default: int, minimum: int, maximum: int) -> int:
+    try:
+        value = int(float(options.get(name, str(default))))
+    except (TypeError, ValueError):
+        value = default
+    return max(minimum, min(maximum, value))
+
+
+def resolve_size(options: dict[str, str]) -> tuple[str, float, float]:
+    name = options.get("PageSize") or options.get("media") or "w5.8h4"
+    name = name.split(",", 1)[0]
+    if name in PRESETS:
+        width, height = PRESETS[name]
+        return name, width, height
+
+    # Also accept CUPS/PWG custom size names such as Custom.58x40mm.
+    match = re.search(r"(\d+(?:\.\d+)?)x(\d+(?:\.\d+)?)mm", name, re.I)
+    if match:
+        width = float(match.group(1))
+        height = float(match.group(2))
+        return name, width, height
+
+    return "w5.8h4", 58.0, 40.0
+
+
+def read_pbm(path: Path) -> tuple[int, int, bytes]:
+    data = path.read_bytes()
+    if not data.startswith(b"P4"):
+        raise RuntimeError("Poppler did not produce a binary PBM (P4)")
+
+    pos = 2
+    tokens: list[bytes] = []
+    while len(tokens) < 2:
+        while pos < len(data) and data[pos] in b" \t\r\n":
+            pos += 1
+        if pos < len(data) and data[pos] == ord("#"):
+            while pos < len(data) and data[pos] not in b"\r\n":
+                pos += 1
+            continue
+        start = pos
+        while pos < len(data) and data[pos] not in b" \t\r\n":
+            pos += 1
+        if start != pos:
+            tokens.append(data[start:pos])
+
+    while pos < len(data) and data[pos] in b" \t\r\n":
+        pos += 1
+
+    width = int(tokens[0])
+    height = int(tokens[1])
+    stride = (width + 7) // 8
+    payload = data[pos:pos + stride * height]
+    if len(payload) != stride * height:
+        raise RuntimeError("Truncated PBM payload")
+    return width, height, payload
+
+
+def source_black(payload: bytes, stride: int, x: int, y: int) -> bool:
+    byte = payload[y * stride + (x // 8)]
+    return bool(byte & (0x80 >> (x % 8)))  # PBM: 1 = black
+
+
+def scale_pbm_to_tspl(width: int, height: int, payload: bytes, target_w: int, target_h: int) -> bytes:
+    """Nearest-neighbour resize and invert PBM bits for TSPL bitmap mode 0.
+
+    PBM P4 uses 1=black, 0=white. The XP-365B TSPL BITMAP mode used here is
+    the inverse: 0=black dot, 1=white. Output rows are byte-aligned.
+    """
+
+    src_stride = (width + 7) // 8
+    dst_stride = (target_w + 7) // 8
+    output = bytearray([0xFF]) * (dst_stride * target_h)
+
+    if width == target_w and height == target_h:
+        for i, value in enumerate(payload):
+            output[i] = value ^ 0xFF
+        return bytes(output)
+
+    for ty in range(target_h):
+        sy = min(height - 1, int(ty * height / target_h))
+        row_base = ty * dst_stride
+        for tx in range(target_w):
+            sx = min(width - 1, int(tx * width / target_w))
+            if source_black(payload, src_stride, sx, sy):
+                output[row_base + (tx // 8)] &= ~(0x80 >> (tx % 8))
+
+    return bytes(output)
+
+
+def page_count(pdf_path: str) -> int:
+    process = subprocess.run(
+        ["pdfinfo", pdf_path],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    match = re.search(r"^Pages:\s+(\d+)", process.stdout, re.M)
+    return int(match.group(1)) if match else 1
+
+
+def render_page(pdf_path: str, page: int, workdir: Path) -> Path:
+    prefix = workdir / f"page-{page}"
+    subprocess.run(
+        [
+            "pdftoppm",
+            "-f", str(page),
+            "-l", str(page),
+            "-singlefile",
+            "-mono",
+            "-r", str(DPI),
+            pdf_path,
+            str(prefix),
+        ],
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.PIPE,
+    )
+    return prefix.with_suffix(".pbm")
+
+
+def main() -> int:
+    if len(sys.argv) < 6 or len(sys.argv) > 7:
+        error("Usage: printhub-tspl job-id user title copies options [filename]")
+        return 1
+
+    job_id, user, title = sys.argv[1], sys.argv[2], sys.argv[3]
+    try:
+        copies = max(1, int(sys.argv[4]))
+    except ValueError:
+        copies = 1
+    options_raw = sys.argv[5]
+    source_file = sys.argv[6] if len(sys.argv) == 7 else None
+
+    options = parse_options(options_raw)
+    page_name, width_mm, height_mm = resolve_size(options)
+    target_w = mm_to_dots(width_mm)
+    target_h = mm_to_dots(height_mm)
+    darkness = int_option(options, "Darkness", 15, 0, 15)
+    speed = int_option(options, "PrintSpeed", 12, 1, 12)
+    gap = int_option(options, "GapsHeight", 3, 0, 10)
+
+    info(
+        f"job={job_id} user={user} title={title!r} size={page_name} "
+        f"{width_mm:g}x{height_mm:g}mm target={target_w}x{target_h} "
+        f"copies={copies} speed={speed} darkness={darkness} gap={gap}"
+    )
+
+    stdin_temp: str | None = None
+    if source_file and os.path.isfile(source_file):
+        pdf_path = source_file
+    else:
+        handle = tempfile.NamedTemporaryFile(prefix="printhub-cups-", suffix=".pdf", delete=False)
+        stdin_temp = handle.name
+        try:
+            while True:
+                chunk = sys.stdin.buffer.read(1024 * 1024)
+                if not chunk:
+                    break
+                handle.write(chunk)
+        finally:
+            handle.close()
+        pdf_path = stdin_temp
+
+    try:
+        pages = page_count(pdf_path)
+        out = sys.stdout.buffer
+        with tempfile.TemporaryDirectory(prefix="printhub-render-") as tmp:
+            workdir = Path(tmp)
+            for page in range(1, pages + 1):
+                pbm_path = render_page(pdf_path, page, workdir)
+                sw, sh, payload = read_pbm(pbm_path)
+                bitmap = scale_pbm_to_tspl(sw, sh, payload, target_w, target_h)
+                width_bytes = (target_w + 7) // 8
+
+                header = (
+                    f"SIZE {width_mm:g} mm,{height_mm:g} mm\r\n"
+                    f"GAP {gap} mm,0 mm\r\n"
+                    "DIRECTION 0,0\r\n"
+                    f"DENSITY {darkness}\r\n"
+                    f"SPEED {speed}\r\n"
+                    "CLS\r\n"
+                    f"BITMAP 0,0,{width_bytes},{target_h},0,"
+                ).encode("ascii")
+                trailer = f"\r\nPRINT {copies},1\r\n".encode("ascii")
+
+                out.write(header)
+                out.write(bitmap)
+                out.write(trailer)
+                out.flush()
+        return 0
+    except BrokenPipeError:
+        error("printer/backend closed the pipe")
+        return 6
+    except subprocess.CalledProcessError as exc:
+        detail = exc.stderr.decode(errors="replace") if isinstance(exc.stderr, bytes) else str(exc.stderr or exc)
+        error(f"PDF rendering failed: {detail.strip()}")
+        return 1
+    except Exception as exc:
+        error(str(exc))
+        return 1
+    finally:
+        if stdin_temp:
+            try:
+                os.unlink(stdin_temp)
+            except FileNotFoundError:
+                pass
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

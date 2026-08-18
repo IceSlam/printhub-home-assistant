@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru" class="initial-splash-pending">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>PrintHub</title>
+  <link rel="icon" type="image/svg+xml" href="./app-icon.svg?v=2.2.19" />
+  <link rel="apple-touch-icon" href="./app-icon.png?v=2.2.19" />
+  <link rel="stylesheet" href="./styles.css?v=2.2.19" />
+  <link rel="stylesheet" href="./app-select.css?v=2.2.19" />
+</head>
+<body class="app-booting">
+  <div id="app-boot" class="app-boot tg-splash" aria-live="polite">
+    <div class="tg-splash-card">
+      <img class="tg-splash-logo" src="./app-icon.svg?v=2.2.19" alt="PrintHub" />
+      <div class="tg-splash-title">PrintHub</div>
+      <div id="app-boot-text" class="tg-splash-subtitle">Подготавливаем печать…</div>
+      <div class="tg-splash-loader" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div id="sidebar-scrim" class="sidebar-scrim" hidden></div>
+  <div id="app" class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><img src="./app-icon.svg?v=2.2.19" alt="PrintHub" /></div>
+        <div><strong>PrintHub</strong><span>Agent + CUPS · v2.2.19</span></div>
+      </div>
+      <nav id="nav" class="nav"></nav>
+      <div class="sidebar-foot">
+        <span id="side-status" class="pill neutral">Загрузка…</span>
+        <button id="classic-cups" class="link-button sidebar-action">Classic CUPS</button>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div class="topbar-main">
+          <button id="sidebar-toggle" class="icon-button sidebar-toggle" type="button" title="Меню" aria-label="Открыть меню" data-fa="menu" data-icon-decorated="1"><svg class="button-icon" viewBox="0 0 448 512" aria-hidden="true"><path fill="currentColor" d="M0 96C0 78.3 14.3 64 32 64h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zm0 160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zm448 160c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h384c17.7 0 32 14.3 32 32z"></path></svg></button>
+          <div class="topbar-copy"><div class="eyebrow">PrintHub</div><h1 id="page-title">Обзор</h1><p id="page-subtitle">Состояние PrintHub, CUPS и очередей</p></div>
+        </div>
+        <div class="top-actions"><span id="agent-pill" class="pill neutral">Agent…</span><button id="refresh" class="icon-button" type="button" title="Обновить" aria-label="Обновить" data-fa="refresh" data-icon-decorated="1"><svg class="button-icon" viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M142.9 142.9c62.5-62.5 163.8-62.5 226.3 0L386.3 160H352c-17.7 0-32 14.3-32 32s14.3 32 32 32h112c17.7 0 32-14.3 32-32V80c0-17.7-14.3-32-32-32s-32 14.3-32 32v35.2l-17.5-17.5c-87.5-87.5-229.3-87.5-316.8 0s-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3z"></path></svg></button></div>
+      </header>
+      <main id="content" class="content"></main>
+    </section>
+  </div>
+
+  <div id="toast-root" class="toasts"></div>
+  <div id="modal-root"></div>
+  <script defer src="./app-select.js?v=2.2.19"></script>
+  <script defer src="./app.js?v=2.2.19"></script>
+</body>
+</html>

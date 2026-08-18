@@ -1,0 +1,13 @@
+{
+  "name": "printhub-home-assistant",
+  "version": "2.2.19",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/homeassistant-combo-entrypoint.js"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5",
+    "ws": "^8.18.0"
+  }
+}

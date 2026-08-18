@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+
+# Pass the PDF produced by cups-filters/pdftopdf unchanged to the PrintHub
+# proxy backend. The proxy backend re-submits it to the internal XP365B queue.
+if [ "$#" -ge 6 ] && [ -n "${6:-}" ] && [ -f "$6" ]; then
+  cat "$6"
+else
+  cat
+fi

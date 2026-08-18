@@ -1,0 +1,10 @@
+{
+  "domain": "printhub",
+  "name": "PrintHub",
+  "version": "2.0.2",
+  "config_flow": true,
+  "documentation": "https://print.iceslam.ru",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "requirements": []
+}

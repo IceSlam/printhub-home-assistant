@@ -1,0 +1,168 @@
+{
+  "title": "PrintHub",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect PrintHub",
+        "description": "Designed for the PrintHub All-in-One App. Reads Agent, CUPS, USB printer and AirPrint state locally; public PrintHub Server data is optional.",
+        "data": {
+          "agent_url": "Local PrintHub API URL",
+          "server_url": "PrintHub Server URL",
+          "admin_api_key": "ADMIN_API_KEY",
+          "scan_interval": "Update interval, seconds"
+        },
+        "data_description": {
+          "agent_url": "For the PrintHub All-in-One App on this Home Assistant keep http://127.0.0.1:35994.",
+          "server_url": "Optional. When empty, the URL reported by the Agent is used.",
+          "admin_api_key": "Optional. Used only for detailed public PrintHub Server job statistics.",
+          "scan_interval": "Local polling interval. Minimum 5 seconds."
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure PrintHub",
+        "description": "Change the local API, public server or update interval.",
+        "data": {
+          "agent_url": "Local PrintHub API URL",
+          "server_url": "PrintHub Server URL",
+          "admin_api_key": "ADMIN_API_KEY",
+          "scan_interval": "Update interval, seconds"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to the local PrintHub API."
+    },
+    "abort": {
+      "already_configured": "This PrintHub is already configured.",
+      "wrong_agent": "The URL belongs to a different PrintHub Agent."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "agent_server_connection": {
+        "name": "Agent server connection"
+      },
+      "cups_scheduler": {
+        "name": "CUPS scheduler"
+      },
+      "cups_queue": {
+        "name": "Main CUPS queue"
+      },
+      "busy": {
+        "name": "Agent busy"
+      },
+      "server_health": {
+        "name": "PrintHub Server"
+      },
+      "usb_printer_connected": {
+        "name": "USB printer connected"
+      },
+      "main_queue_enabled": {
+        "name": "Main queue enabled"
+      },
+      "main_queue_accepting": {
+        "name": "Main queue accepting jobs"
+      },
+      "airprint_ready": {
+        "name": "AirPrint ready"
+      },
+      "cups_sharing": {
+        "name": "CUPS printer sharing"
+      },
+      "cups_web_interface": {
+        "name": "Classic CUPS WebUI"
+      }
+    },
+    "sensor": {
+      "queued_jobs": {
+        "name": "Agent queue"
+      },
+      "active_job": {
+        "name": "Active Agent job"
+      },
+      "last_print_transport": {
+        "name": "Last print transport"
+      },
+      "cups_health": {
+        "name": "CUPS diagnostics"
+      },
+      "agent_version": {
+        "name": "Agent version"
+      },
+      "server_last_message": {
+        "name": "Last server message"
+      },
+      "server_jobs": {
+        "name": "Server jobs"
+      },
+      "server_pending_jobs": {
+        "name": "Pending server jobs"
+      },
+      "server_printing_jobs": {
+        "name": "Printing server jobs"
+      },
+      "server_failed_jobs": {
+        "name": "Failed server jobs"
+      },
+      "last_server_job": {
+        "name": "Last server job"
+      },
+      "app_version": {
+        "name": "PrintHub App version"
+      },
+      "cups_default_destination": {
+        "name": "Default CUPS destination"
+      },
+      "cups_printers_count": {
+        "name": "CUPS printers"
+      },
+      "cups_active_jobs_count": {
+        "name": "Active CUPS jobs"
+      },
+      "cups_classes_count": {
+        "name": "CUPS classes"
+      },
+      "main_queue_state": {
+        "name": "Main queue"
+      },
+      "main_queue_uri": {
+        "name": "Main queue URI"
+      },
+      "airprint_queue_state": {
+        "name": "AirPrint queue"
+      },
+      "airprint_profile": {
+        "name": "AirPrint media"
+      },
+      "usb_uri": {
+        "name": "USB URI"
+      },
+      "default_media": {
+        "name": "Default label media"
+      },
+      "darkness": {
+        "name": "Print darkness"
+      },
+      "print_speed": {
+        "name": "Print speed"
+      },
+      "gap_mm": {
+        "name": "Label gap"
+      },
+      "webui_port": {
+        "name": "PrintHub WebUI port"
+      }
+    },
+    "button": {
+      "refresh_status": {
+        "name": "Refresh status"
+      },
+      "test_print": {
+        "name": "Test print"
+      },
+      "purge_queue": {
+        "name": "Purge print queue"
+      }
+    }
+  }
+}

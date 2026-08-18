@@ -1,0 +1,12 @@
+{
+  "name": "printhub-agent",
+  "version": "1.4.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/agent.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0",
+    "sharp": "^0.33.5"
+  }
+}

@@ -1,0 +1,27 @@
+services:
+  printhub-agent:
+    build: ./agent
+    container_name: printhub-agent
+    restart: unless-stopped
+    init: true
+    env_file:
+      - .env.agent
+    environment:
+      # Эти значения не являются секретами. Они заданы явно, чтобы старый
+      # или неполный .env.agent не ронял агент после обновления проекта.
+      SERVER_URL: "${SERVER_URL:-https://print.iceslam.ru}"
+      WS_URL: "${WS_URL:-wss://print.iceslam.ru/ws/agent}"
+      AGENT_ID: "${AGENT_ID:-iceslamprint-xp365b}"
+      CUPS_SERVER: "${CUPS_SERVER:-/run/cups/cups.sock}"
+    volumes:
+      # ВАЖНО: монтируем каталог, а не отдельный cups.sock.
+      # При перезапуске host CUPS socket пересоздаётся с новым inode;
+      # directory bind остаётся актуальным и контейнер видит новый socket.
+      - /run/cups:/run/cups
+    healthcheck:
+      test: ["CMD-SHELL", "test -S /run/cups/cups.sock && CUPS_SERVER=/run/cups/cups.sock lpstat -r 2>/dev/null | grep -q 'scheduler is running'"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    stop_grace_period: 15s

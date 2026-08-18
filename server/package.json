@@ -1,0 +1,19 @@
+{
+  "name": "printhub-server",
+  "version": "3.16.29",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "@fastify/multipart": "^8.3.1",
+    "@fastify/static": "^7.0.4",
+    "fastify": "^4.28.1",
+    "node-telegram-bot-api": "^0.66.0",
+    "ws": "^8.18.0",
+    "nanoid": "^5.0.7",
+    "pdf-lib": "^1.17.1",
+    "sharp": "^0.33.5"
+  }
+}

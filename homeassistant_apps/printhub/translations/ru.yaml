@@ -1,0 +1,102 @@
+configuration:
+  admin_username:
+    name: Имя администратора
+    description: Имя пользователя для прямого доступа к PrintHub WebUI и классическому интерфейсу CUPS.
+  admin_password:
+    name: Пароль администратора
+    description: Пароль для прямого доступа к PrintHub WebUI и классическому интерфейсу CUPS.
+  server_url:
+    name: Адрес PrintHub Server
+    description: HTTPS-адрес центрального сервера PrintHub, с которым работает агент.
+  ws_url:
+    name: Адрес WebSocket PrintHub
+    description: WSS-адрес для постоянного соединения агента с PrintHub Server.
+  agent_token:
+    name: Токен агента
+    description: Секретный токен PrintHub Agent. Если оставить поле пустым, CUPS, AirPrint и WebUI продолжат работать, но удалённый агент будет отключён.
+  agent_id:
+    name: Идентификатор агента
+    description: Уникальное имя этого PrintHub Agent на сервере.
+  main_queue:
+    name: Основная очередь принтера
+    description: Имя основной CUPS-очереди, которую использует PrintHub Agent.
+  printer_display_name:
+    name: Название принтера
+    description: Понятное имя принтера для интерфейса PrintHub и сетевого обнаружения.
+  usb_uri:
+    name: USB-адрес принтера
+    description: Оставьте пустым для автоматического поиска Xprinter XP-365B. При необходимости можно указать CUPS USB URI вручную.
+  share_main_queue:
+    name: Публиковать основную очередь в сети
+    description: Разрешить другим устройствам видеть основную CUPS-очередь. Обычно для AirPrint достаточно отдельной AirPrint-очереди.
+  airprint_enabled:
+    name: Включить AirPrint
+    description: Создавать и публиковать отдельную очередь AirPrint для iPhone, iPad и macOS.
+  airprint_queue:
+    name: Имя очереди AirPrint
+    description: Системное имя отдельной CUPS-очереди, публикуемой для AirPrint.
+  airprint_display_name:
+    name: Название принтера в AirPrint
+    description: Имя, которое будет отображаться при выборе принтера на iPhone, iPad и macOS.
+  airprint_size:
+    name: Размер этикетки AirPrint
+    description: Фиксированный размер этикетки для AirPrint-очереди.
+  default_page_size:
+    name: Размер этикетки по умолчанию
+    description: Размер, используемый основной очередью, если формат не был задан явно.
+  darkness:
+    name: Плотность печати
+    description: Насыщенность термопечати Xprinter от 0 до 15.
+  print_speed:
+    name: Скорость печати
+    description: Скорость печати Xprinter от 1 до 12.
+  gap_mm:
+    name: Межэтикеточный зазор
+    description: Высота зазора между этикетками в миллиметрах.
+  print_dpi:
+    name: Разрешение печати, DPI
+    description: Разрешение растеризации PDF перед печатью. Для XP-365B обычно используется 203 DPI.
+  pdf_detect_tolerance_mm:
+    name: Допуск определения размера PDF, мм
+    description: Максимальное отклонение размера PDF от известного профиля для автоматического определения формата.
+  cups_ready_timeout_seconds:
+    name: Ожидание запуска CUPS, сек.
+    description: Сколько секунд агент ждёт готовности планировщика CUPS при запуске.
+  cups_health_interval_seconds:
+    name: Интервал проверки CUPS, сек.
+    description: Как часто PrintHub Agent проверяет состояние CUPS и очередей.
+  cups_print_retries:
+    name: Повторные попытки печати
+    description: Сколько раз повторять отправку задания в CUPS при временной ошибке.
+  cups_print_retry_delay_seconds:
+    name: Пауза между попытками печати, сек.
+    description: Задержка между повторными попытками отправки задания в CUPS.
+  cups_wait_for_job:
+    name: Ожидать завершения задания CUPS
+    description: Считать печать завершённой только после выхода задания из активной очереди CUPS.
+  cups_job_timeout_seconds:
+    name: Тайм-аут задания CUPS, сек.
+    description: Максимальное время ожидания завершения задания печати.
+  cups_job_poll_ms:
+    name: Интервал проверки задания CUPS, мс
+    description: Частота опроса состояния активного задания CUPS.
+  ws_status_interval_seconds:
+    name: Интервал отправки статуса, сек.
+    description: Как часто Agent отправляет служебный статус на PrintHub Server.
+  ws_native_ping_seconds:
+    name: Интервал WebSocket Ping, сек.
+    description: Как часто Agent выполняет служебный Ping для контроля WebSocket-соединения.
+  ws_pong_timeout_seconds:
+    name: Тайм-аут WebSocket Pong, сек.
+    description: Через сколько секунд без ответа Pong соединение считается потерянным и переподключается.
+  status_host:
+    name: Адрес локального API состояния
+    description: Интерфейс, на котором доступен локальный API PrintHub для Home Assistant Integration. Рекомендуется 127.0.0.1.
+  status_port:
+    name: Порт локального API состояния
+    description: Локальный TCP-порт API, который использует Home Assistant Integration.
+  web_port:
+    name: Порт современного WebUI
+    description: Внутренний TCP-порт современного интерфейса PrintHub, используемый Home Assistant Ingress.
+network:
+  631/tcp: CUPS / IPP / AirPrint — сетевой порт печати

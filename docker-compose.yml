@@ -1,0 +1,35 @@
+services:
+  server:
+    build: ./server
+    container_name: printhub-server
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PORT: ${PORT:-8080}
+      PUBLIC_URL: ${PUBLIC_URL}
+      WEBAPP_URL: ${WEBAPP_URL}
+      AGENT_TOKEN: ${AGENT_TOKEN}
+      DEFAULT_AGENT_ID: ${DEFAULT_AGENT_ID:-iceslamprint-xp365b}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_ALLOWED_USER_IDS: ${TELEGRAM_ALLOWED_USER_IDS}
+      TELEGRAM_MODE: ${TELEGRAM_MODE:-polling}
+      DEFAULT_COPIES: ${DEFAULT_COPIES:-1}
+      MARKETPLACE_CACHE_MS: ${MARKETPLACE_CACHE_MS:-20000}
+      MARKETPLACE_NOTIFY_MS: ${MARKETPLACE_NOTIFY_MS:-30000}
+      MARKETPLACE_NOTIFY_INITIAL: ${MARKETPLACE_NOTIFY_INITIAL:-false}
+      WEBAPP_INITDATA_MAX_AGE: ${WEBAPP_INITDATA_MAX_AGE:-86400}
+      OZON_ENABLED: ${OZON_ENABLED:-true}
+      OZON_CLIENT_ID: ${OZON_CLIENT_ID:-}
+      OZON_API_KEY: ${OZON_API_KEY:-}
+      WB_ENABLED: ${WB_ENABLED:-true}
+      WB_API_TOKEN: ${WB_API_TOKEN:-}
+      YANDEX_ENABLED: ${YANDEX_ENABLED:-true}
+      YANDEX_API_KEY: ${YANDEX_API_KEY:-}
+      YANDEX_CAMPAIGN_IDS: ${YANDEX_CAMPAIGN_IDS:-}
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "127.0.0.1:${PORT:-8080}:8080"
+
+  # Агент обычно запускается в офисе отдельным compose-файлом.

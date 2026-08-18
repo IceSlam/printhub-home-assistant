@@ -1,0 +1,102 @@
+configuration:
+  admin_username:
+    name: Administrator username
+    description: Username for direct PrintHub WebUI and Classic CUPS access.
+  admin_password:
+    name: Administrator password
+    description: Password for direct PrintHub WebUI and Classic CUPS access.
+  server_url:
+    name: PrintHub Server address
+    description: HTTPS address of the central PrintHub Server used by the Agent.
+  ws_url:
+    name: PrintHub WebSocket address
+    description: WSS address used for the persistent Agent connection to PrintHub Server.
+  agent_token:
+    name: Agent token
+    description: Secret PrintHub Agent token. If empty, CUPS, AirPrint and WebUI remain available while the remote Agent stays disabled.
+  agent_id:
+    name: Agent identifier
+    description: Unique name of this PrintHub Agent on the server.
+  main_queue:
+    name: Main printer queue
+    description: Name of the main CUPS queue used by PrintHub Agent.
+  printer_display_name:
+    name: Printer display name
+    description: Human-readable printer name used in PrintHub and network discovery.
+  usb_uri:
+    name: Printer USB address
+    description: Leave empty to auto-detect Xprinter XP-365B, or provide a CUPS USB URI manually.
+  share_main_queue:
+    name: Share the main queue
+    description: Publish the main CUPS queue to the network. Usually the dedicated AirPrint queue is sufficient for mobile printing.
+  airprint_enabled:
+    name: Enable AirPrint
+    description: Create and publish a dedicated AirPrint queue for iPhone, iPad and macOS.
+  airprint_queue:
+    name: AirPrint queue name
+    description: System name of the dedicated CUPS queue published for AirPrint.
+  airprint_display_name:
+    name: AirPrint printer name
+    description: Printer name shown when selecting a printer on iPhone, iPad and macOS.
+  airprint_size:
+    name: AirPrint label size
+    description: Fixed label size exposed by the AirPrint queue.
+  default_page_size:
+    name: Default label size
+    description: Label size used by the main queue when no format is explicitly specified.
+  darkness:
+    name: Print darkness
+    description: Xprinter thermal print darkness from 0 to 15.
+  print_speed:
+    name: Print speed
+    description: Xprinter print speed from 1 to 12.
+  gap_mm:
+    name: Label gap
+    description: Gap height between labels in millimeters.
+  print_dpi:
+    name: Print resolution, DPI
+    description: Resolution used to rasterize PDF before printing. XP-365B normally uses 203 DPI.
+  pdf_detect_tolerance_mm:
+    name: PDF size detection tolerance, mm
+    description: Maximum size difference from a known label profile when auto-detecting PDF media.
+  cups_ready_timeout_seconds:
+    name: CUPS startup timeout, sec.
+    description: How long the Agent waits for the CUPS scheduler to become ready at startup.
+  cups_health_interval_seconds:
+    name: CUPS health interval, sec.
+    description: How often PrintHub Agent checks the CUPS scheduler and queues.
+  cups_print_retries:
+    name: Print retry attempts
+    description: Number of times to retry sending a job to CUPS after a temporary error.
+  cups_print_retry_delay_seconds:
+    name: Print retry delay, sec.
+    description: Delay between CUPS print retry attempts.
+  cups_wait_for_job:
+    name: Wait for CUPS job completion
+    description: Consider printing complete only after the job leaves the active CUPS queue.
+  cups_job_timeout_seconds:
+    name: CUPS job timeout, sec.
+    description: Maximum time to wait for a print job to finish.
+  cups_job_poll_ms:
+    name: CUPS job polling interval, ms
+    description: How frequently the active CUPS job state is checked.
+  ws_status_interval_seconds:
+    name: Status reporting interval, sec.
+    description: How often the Agent reports its status to PrintHub Server.
+  ws_native_ping_seconds:
+    name: WebSocket Ping interval, sec.
+    description: How often the Agent sends a native WebSocket Ping to check the connection.
+  ws_pong_timeout_seconds:
+    name: WebSocket Pong timeout, sec.
+    description: Maximum time without Pong before the Agent reconnects.
+  status_host:
+    name: Local status API address
+    description: Interface used by the local PrintHub API for Home Assistant Integration. 127.0.0.1 is recommended.
+  status_port:
+    name: Local status API port
+    description: Local TCP port used by Home Assistant Integration.
+  web_port:
+    name: Modern WebUI port
+    description: Internal TCP port of the modern PrintHub WebUI used by Home Assistant Ingress.
+network:
+  631/tcp: CUPS / IPP / AirPrint printing port

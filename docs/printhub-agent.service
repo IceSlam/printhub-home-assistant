@@ -1,0 +1,19 @@
+[Unit]
+Description=PrintHub Office Agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/opt/printhub-agent
+Environment=SERVER_WS=wss://print.example.ru/ws/agent?agentId=office-xp365b&token=change-me-agent-token
+Environment=PRINTER_HOST=192.168.1.50
+Environment=PRINTER_PORT=9100
+Environment=DEFAULT_DPI=203
+ExecStart=/usr/bin/npm start
+Restart=always
+RestartSec=5
+User=printhub
+Group=printhub
+
+[Install]
+WantedBy=multi-user.target

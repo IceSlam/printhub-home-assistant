@@ -1,0 +1,168 @@
+{
+  "title": "PrintHub",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Подключить PrintHub",
+        "description": "Интеграция предназначена для PrintHub All-in-One App и получает локально состояние Agent, CUPS, USB-принтера и AirPrint. Данные публичного PrintHub Server остаются опциональными.",
+        "data": {
+          "agent_url": "URL локального PrintHub API",
+          "server_url": "URL PrintHub Server",
+          "admin_api_key": "ADMIN_API_KEY",
+          "scan_interval": "Интервал обновления, секунд"
+        },
+        "data_description": {
+          "agent_url": "Для PrintHub All-in-One App на этом же Home Assistant оставьте http://127.0.0.1:35994.",
+          "server_url": "Необязательно. Если оставить пустым, URL будет взят из состояния Agent.",
+          "admin_api_key": "Необязательно. Используется только для подробной статистики заданий публичного PrintHub Server.",
+          "scan_interval": "Интервал локального polling. Минимум 5 секунд."
+        }
+      },
+      "reconfigure": {
+        "title": "Перенастроить PrintHub",
+        "description": "Измените адрес локального API, публичного сервера или интервал обновления.",
+        "data": {
+          "agent_url": "URL локального PrintHub API",
+          "server_url": "URL PrintHub Server",
+          "admin_api_key": "ADMIN_API_KEY",
+          "scan_interval": "Интервал обновления, секунд"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Не удалось подключиться к локальному PrintHub API."
+    },
+    "abort": {
+      "already_configured": "Этот PrintHub уже настроен.",
+      "wrong_agent": "Указанный адрес относится к другому PrintHub Agent."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "agent_server_connection": {
+        "name": "Соединение Agent с сервером"
+      },
+      "cups_scheduler": {
+        "name": "CUPS scheduler"
+      },
+      "cups_queue": {
+        "name": "Основная очередь CUPS"
+      },
+      "busy": {
+        "name": "Agent занят"
+      },
+      "server_health": {
+        "name": "PrintHub Server"
+      },
+      "usb_printer_connected": {
+        "name": "USB-принтер подключён"
+      },
+      "main_queue_enabled": {
+        "name": "Основная очередь включена"
+      },
+      "main_queue_accepting": {
+        "name": "Основная очередь принимает задания"
+      },
+      "airprint_ready": {
+        "name": "AirPrint готов"
+      },
+      "cups_sharing": {
+        "name": "Общий доступ CUPS"
+      },
+      "cups_web_interface": {
+        "name": "Classic CUPS WebUI"
+      }
+    },
+    "sensor": {
+      "queued_jobs": {
+        "name": "Очередь Agent"
+      },
+      "active_job": {
+        "name": "Активное задание Agent"
+      },
+      "last_print_transport": {
+        "name": "Последний транспорт печати"
+      },
+      "cups_health": {
+        "name": "Диагностика CUPS"
+      },
+      "agent_version": {
+        "name": "Версия Agent"
+      },
+      "server_last_message": {
+        "name": "Последнее сообщение сервера"
+      },
+      "server_jobs": {
+        "name": "Заданий на сервере"
+      },
+      "server_pending_jobs": {
+        "name": "Заданий ожидают"
+      },
+      "server_printing_jobs": {
+        "name": "Заданий печатаются"
+      },
+      "server_failed_jobs": {
+        "name": "Заданий с ошибкой"
+      },
+      "last_server_job": {
+        "name": "Последнее задание"
+      },
+      "app_version": {
+        "name": "Версия PrintHub App"
+      },
+      "cups_default_destination": {
+        "name": "Принтер CUPS по умолчанию"
+      },
+      "cups_printers_count": {
+        "name": "Принтеров CUPS"
+      },
+      "cups_active_jobs_count": {
+        "name": "Активных заданий CUPS"
+      },
+      "cups_classes_count": {
+        "name": "Классов CUPS"
+      },
+      "main_queue_state": {
+        "name": "Основная очередь"
+      },
+      "main_queue_uri": {
+        "name": "URI основной очереди"
+      },
+      "airprint_queue_state": {
+        "name": "Очередь AirPrint"
+      },
+      "airprint_profile": {
+        "name": "Размер AirPrint"
+      },
+      "usb_uri": {
+        "name": "USB URI"
+      },
+      "default_media": {
+        "name": "Размер этикетки по умолчанию"
+      },
+      "darkness": {
+        "name": "Плотность печати"
+      },
+      "print_speed": {
+        "name": "Скорость печати"
+      },
+      "gap_mm": {
+        "name": "Межэтикеточный зазор"
+      },
+      "webui_port": {
+        "name": "Порт PrintHub WebUI"
+      }
+    },
+    "button": {
+      "refresh_status": {
+        "name": "Обновить статус"
+      },
+      "test_print": {
+        "name": "Тестовая печать"
+      },
+      "purge_queue": {
+        "name": "Очистить очередь печати"
+      }
+    }
+  }
+}
