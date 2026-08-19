@@ -3,6 +3,24 @@
 # Copy the CA bundle from the full official Node Bookworm image first, then continue on slim.
 FROM node:20-bookworm AS printhub-ca-bootstrap
 
+# Build the architecture-native CUPS raster filter from source. This restores
+# the original XP-365B PPD pipeline (application/vnd.cups-raster) on amd64,
+# aarch64 and armv7 without shipping an opaque vendor ELF binary.
+FROM node:20-bookworm-slim AS cups-filter-build
+COPY --from=printhub-ca-bootstrap /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY src/native/rastertosnailtspl-xprinter.c /tmp/rastertosnailtspl-xprinter.c
+RUN set -eux; \
+    if [ -f /etc/apt/sources.list ]; then \
+      sed -ri -e 's|http://deb.debian.org|https://deb.debian.org|g' -e 's|http://security.debian.org|https://security.debian.org|g' /etc/apt/sources.list; \
+    fi; \
+    if [ -d /etc/apt/sources.list.d ]; then \
+      find /etc/apt/sources.list.d -type f -print0 | xargs -0 -r sed -ri -e 's|http://deb.debian.org|https://deb.debian.org|g' -e 's|http://security.debian.org|https://security.debian.org|g'; \
+    fi; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends build-essential libcups2-dev ca-certificates; \
+    cc -O2 -pipe -Wall -Wextra -Werror -std=c11 /tmp/rastertosnailtspl-xprinter.c -lcups -o /usr/local/bin/rastertosnailtspl-xprinter; \
+    strip /usr/local/bin/rastertosnailtspl-xprinter
+
 FROM node:20-bookworm-slim
 
 COPY --from=printhub-ca-bootstrap /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
@@ -75,11 +93,12 @@ RUN npm install --omit=dev
 COPY src ./src
 COPY web ./web
 COPY rootfs/ /
+COPY --from=cups-filter-build /usr/local/bin/rastertosnailtspl-xprinter /usr/lib/cups/filter/rastertosnailtspl-xprinter
 COPY run.sh /run.sh
 
 RUN chmod 0755 \
       /run.sh \
-      /usr/lib/cups/filter/printhub-tspl \
+      /usr/lib/cups/filter/rastertosnailtspl-xprinter \
       /usr/lib/cups/filter/printhub-pdf-pass \
       /usr/lib/cups/backend/printhubproxy \
  && mkdir -p /run/cups /var/spool/cups /var/cache/cups /data/cups/config /data/cups/log

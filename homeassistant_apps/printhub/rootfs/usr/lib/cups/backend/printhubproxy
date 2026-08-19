@@ -45,9 +45,11 @@ if [ ! -s "$TMP" ]; then
   exit 1
 fi
 
-# Submit to the internal multi-size queue. This keeps a single USB owner and
-# prevents the AirPrint queue and PrintHub Agent queue from opening USB at the
-# same time.
+# Submit to the internal multi-size queue. Both the AirPrint proxy PPD and the
+# main XP-365B PPD use cupsManualCopies=False, so CUPS keeps the job as one
+# raster page and carries the requested copy count through to the TSPL filter.
+# The printer then executes one PRINT N,1 command, producing a continuous run
+# without per-copy CUPS/RIP pauses.
 RESULT="$(lp \
   -d "$QUEUE" \
   -n "${COPIES:-1}" \
@@ -61,5 +63,5 @@ RESULT="$(lp \
     exit 1
   }
 
-echo "INFO: printhubproxy: AirPrint job $JOB_ID forwarded to $QUEUE ($PAGE_SIZE): $RESULT" >&2
+echo "INFO: printhubproxy: AirPrint job $JOB_ID forwarded to $QUEUE ($PAGE_SIZE), copies=${COPIES:-1}: $RESULT" >&2
 exit 0

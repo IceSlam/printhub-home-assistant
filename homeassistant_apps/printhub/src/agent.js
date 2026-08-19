@@ -91,6 +91,9 @@ const CUPS_PRINT_RETRY_DELAY_MS = Number(process.env.CUPS_PRINT_RETRY_DELAY_MS |
 const CUPS_WAIT_FOR_JOB = !['0','false','no','off'].includes(String(process.env.CUPS_WAIT_FOR_JOB || 'true').toLowerCase());
 const CUPS_JOB_TIMEOUT_MS = Number(process.env.CUPS_JOB_TIMEOUT_MS || 120000);
 const CUPS_JOB_POLL_MS = Number(process.env.CUPS_JOB_POLL_MS || 1000);
+const CUPS_PRINT_SPEED = Math.min(12, Math.max(1, Number(process.env.PRINTHUB_PRINT_SPEED || process.env.CUPS_PRINT_SPEED || 12)));
+const CUPS_DARKNESS = Math.max(0, Math.min(15, Number(process.env.PRINTHUB_DARKNESS || process.env.CUPS_DARKNESS || 15)));
+const CUPS_GAP_MM = Math.max(0, Math.min(10, Number(process.env.PRINTHUB_GAP_MM || process.env.CUPS_GAP_MM || 3)));
 let lastCupsHealth = {
   schedulerRunning: false,
   socketPresent: false,
@@ -161,6 +164,10 @@ const PRESETS = {
     cupsPageSize: CUPS_PAGE_SIZES['120x75'],
   },
 };
+
+// Preserve the full logical label raster. In particular, 58x40 is
+// 464x320 dots at 203 DPI. Shrinking a 1-bit/barcode raster to 56 mm after
+// rasterization causes aliasing and visibly ragged barcode edges.
 
 function log(...args) {
   console.log(new Date().toISOString(), ...args);
@@ -478,9 +485,9 @@ async function imageToTspl(buffer, job, presetOverride = null) {
   const copies = Math.max(1, Number(job.copies || 1));
   const header = [
     `SIZE ${preset.widthMm} mm,${preset.heightMm} mm`,
-    'GAP 3 mm,0 mm',
-    'DENSITY 15',
-    'SPEED 12',
+    `GAP ${CUPS_GAP_MM} mm,0 mm`,
+    `DENSITY ${CUPS_DARKNESS}`,
+    `SPEED ${CUPS_PRINT_SPEED}`,
     'DIRECTION 1',
     'REFERENCE 0,0',
     'OFFSET 0 mm',
@@ -635,6 +642,25 @@ function parseLpRequestId(output) {
   return match ? match[1] : '';
 }
 
+async function cancelCupsJob(requestId) {
+  if (!requestId) return false;
+  try {
+    await execFileAsync('cancel', [requestId], {
+      env: cupsEnv(),
+      timeout: 8000,
+      maxBuffer: 256 * 1024,
+    });
+    log('CUPS job canceled by PrintHub safety timeout', { requestId });
+    return true;
+  } catch (error) {
+    log('failed to cancel CUPS job after timeout', {
+      requestId,
+      error: String(error?.stderr || error?.message || error).trim(),
+    });
+    return false;
+  }
+}
+
 async function waitForCupsJob(queue, requestId) {
   if (!CUPS_WAIT_FOR_JOB || !requestId) return;
 
@@ -670,7 +696,13 @@ async function waitForCupsJob(queue, requestId) {
     await sleep(Math.max(250, CUPS_JOB_POLL_MS));
   }
 
-  throw new Error(`CUPS job ${requestId} не завершился за ${Math.round(CUPS_JOB_TIMEOUT_MS / 1000)} сек.`);
+  const canceled = await cancelCupsJob(requestId);
+  throw new Error(
+    `CUPS job ${requestId} не завершился за ${Math.round(CUPS_JOB_TIMEOUT_MS / 1000)} сек. ` +
+    (canceled
+      ? 'Задание отменено в CUPS, чтобы оно не возобновилось самопроизвольно после восстановления принтера.'
+      : 'Не удалось автоматически отменить зависшее задание — отмените его в CUPS вручную перед восстановлением принтера.')
+  );
 }
 
 function cupsPrinterCandidates() {
@@ -759,9 +791,9 @@ async function printPdfViaCups(buffer, job) {
         '-o', 'Resolution=203dpi',
         '-o', 'MediaMethod=Direct',
         '-o', 'PaperType=LabelGaps',
-        '-o', 'GapsHeight=3',
-        '-o', 'PrintSpeed=12',
-        '-o', 'Darkness=15',
+        '-o', `GapsHeight=${CUPS_GAP_MM}`,
+        '-o', `PrintSpeed=${CUPS_PRINT_SPEED}`,
+        '-o', `Darkness=${CUPS_DARKNESS}`,
         '-o', 'HalftoneType=None',
         '-o', 'fit-to-page',
         '-o', 'print-scaling=fit',
@@ -923,7 +955,7 @@ function statusPayload(type = 'agent:status') {
     serverLastMessageAt,
     serverLastPongAt,
     serverLastError,
-    version: '1.5.1',
+    version: '1.5.5',
   };
 }
 

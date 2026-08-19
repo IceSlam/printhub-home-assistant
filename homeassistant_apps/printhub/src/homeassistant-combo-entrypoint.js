@@ -59,7 +59,7 @@ const statusPort = int(options.status_port, 35994, 1024, 65535);
 const webPort = int(options.web_port, 8099, 1024, 65535);
 const adminUsername = str(options.admin_username, 'admin');
 const adminPassword = str(options.admin_password, 'admin');
-const APP_VERSION = '2.2.19';
+const APP_VERSION = '2.2.24';
 
 Object.assign(process.env, {
   SERVER_URL: serverUrl,
@@ -106,7 +106,7 @@ function agentSnapshot() {
     disabled: true,
     reason: 'agent_token is not configured',
     printerName: process.env.PRINTER_NAME,
-    version: '1.5.1',
+    version: '1.5.5',
   };
   return agentModule.getAgentStatusSnapshot();
 }

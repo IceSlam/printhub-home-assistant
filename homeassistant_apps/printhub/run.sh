@@ -20,9 +20,39 @@ AIRPRINT_QUEUE="$(opt airprint_queue XP365B_AirPrint)"
 AIRPRINT_NAME="$(opt airprint_display_name 'Xprinter XP-365B 58x40')"
 AIRPRINT_SIZE="$(opt airprint_size 58x40)"
 DEFAULT_SIZE="$(opt default_page_size 58x40)"
-DARKNESS="$(opt darkness 15)"
-PRINT_SPEED="$(opt print_speed 12)"
+CONFIG_DARKNESS="$(opt darkness 15)"
+CONFIG_PRINT_SPEED="$(opt print_speed 12)"
+DARKNESS="$CONFIG_DARKNESS"
+PRINT_SPEED="$CONFIG_PRINT_SPEED"
 GAP_MM="$(opt gap_mm 3)"
+
+# 2.2.21/2.2.22 changed the defaults from the original XP-365B profile
+# (Darkness=15, PrintSpeed=12) to 10/5. On already-installed HA Apps those
+# values persist in /data/options.json even after config.yaml is corrected.
+# Migrate only that exact regression pair once. The active override is removed
+# as soon as the user changes either setting, so future explicit values remain
+# fully user-controlled (including 10/5 if selected again later).
+QUALITY_MIGRATION_DONE=/data/.printhub-quality-profile-3.16.33.done
+QUALITY_MIGRATION_OVERRIDE=/data/.printhub-quality-profile-3.16.33.override
+if [ ! -e "$QUALITY_MIGRATION_DONE" ]; then
+  : > "$QUALITY_MIGRATION_DONE"
+  if [ "$CONFIG_DARKNESS" = "10" ] && [ "$CONFIG_PRINT_SPEED" = "5" ]; then
+    : > "$QUALITY_MIGRATION_OVERRIDE"
+    echo '[PrintHub] restoring pre-3.16.31 XP-365B quality profile: Darkness=15, PrintSpeed=12'
+  fi
+fi
+if [ -e "$QUALITY_MIGRATION_OVERRIDE" ]; then
+  if [ "$CONFIG_DARKNESS" = "10" ] && [ "$CONFIG_PRINT_SPEED" = "5" ]; then
+    DARKNESS=15
+    PRINT_SPEED=12
+  else
+    rm -f "$QUALITY_MIGRATION_OVERRIDE"
+  fi
+fi
+
+export PRINTHUB_PRINT_SPEED="$PRINT_SPEED"
+export PRINTHUB_DARKNESS="$DARKNESS"
+export PRINTHUB_GAP_MM="$GAP_MM"
 
 case "$DEFAULT_SIZE" in
   58x40) MAIN_PAGE=w5.8h4 ;;
@@ -279,7 +309,7 @@ configure_printhub_queues() {
     -P /usr/share/cups/model/printhub/XP-365B.ppd \
     -D "$PRINTER_NAME" -L 'PrintHub' \
     -o "printer-is-shared=$SHARE_MAIN" \
-    -o printer-error-policy=retry-current-job \
+    -o printer-error-policy=stop-printer \
     -o "PageSize=$MAIN_PAGE" -o "media=$MAIN_PAGE" \
     -o Resolution=203dpi -o MediaMethod=Direct -o PaperType=LabelGaps \
     -o "GapsHeight=$GAP_MM" -o "PrintSpeed=$PRINT_SPEED" \
@@ -292,7 +322,7 @@ configure_printhub_queues() {
     lpadmin -p "$AIRPRINT_QUEUE" -E \
       -v "printhubproxy:/$MAIN_QUEUE/$AIRPRINT_PAGE" \
       -P "$AIRPRINT_PPD" -D "$AIRPRINT_NAME" -L 'PrintHub AirPrint' \
-      -o printer-is-shared=true -o printer-error-policy=retry-current-job
+      -o printer-is-shared=true -o printer-error-policy=stop-printer
     cupsenable "$AIRPRINT_QUEUE" || true
     cupsaccept "$AIRPRINT_QUEUE" || true
   else

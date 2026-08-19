@@ -75,8 +75,11 @@ const OPTION_VALUE_LABELS = {
   },
 };
 
-let view = location.hash?.replace('#', '') || 'overview';
-if (!NAV.some(item => item[0] === view)) view = 'overview';
+// Internal HA App navigation must stay entirely inside the already loaded ingress
+// document. Updating location.hash makes Home Assistant treat the iframe as having
+// navigated and, depending on the frontend lifecycle, can recreate/reload ingress.
+// That re-runs the document boot sequence and incorrectly shows the splash screen.
+let view = 'overview';
 let cache = { printers: [], classes: [] };
 let jobsFilter = 'active';
 let refreshTimer = null;
@@ -318,8 +321,15 @@ function syncPageHeading() {
 }
 
 function navigate(next) {
+  if (!NAV.some(item => item[0] === next)) return;
+  if (next === view) {
+    closeSidebar();
+    return;
+  }
+
+  // Do not touch location/hash/history here. The HA App is an ingress SPA and
+  // switching its own sections must not create a browser navigation entry.
   view = next;
-  location.hash = next;
   renderNav();
   syncPageHeading();
   closeSidebar();
@@ -344,11 +354,6 @@ document.addEventListener('click', event => {
     navigate(navButton.dataset.view);
   }
 });
-window.addEventListener('hashchange', () => {
-  const next = location.hash?.replace('#', '') || 'overview';
-  if (NAV.some(item => item[0] === next) && next !== view) navigate(next);
-});
-
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) render(true);
 });

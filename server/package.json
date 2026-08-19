@@ -1,6 +1,6 @@
 {
   "name": "printhub-server",
-  "version": "3.16.29",
+  "version": "3.16.34",
   "type": "module",
   "scripts": {
     "start": "node src/index.js",

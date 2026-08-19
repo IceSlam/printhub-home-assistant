@@ -49,7 +49,7 @@ configuration:
     description: Xprinter thermal print darkness from 0 to 15.
   print_speed:
     name: Print speed
-    description: Xprinter print speed from 1 to 12.
+    description: Xprinter print speed. The value is passed to the PPD/TSPL profile without a hidden cap; the PrintHub XP-365B profile uses 12 by default.
   gap_mm:
     name: Label gap
     description: Gap height between labels in millimeters.
@@ -76,7 +76,7 @@ configuration:
     description: Consider printing complete only after the job leaves the active CUPS queue.
   cups_job_timeout_seconds:
     name: CUPS job timeout, sec.
-    description: Maximum time to wait for a print job to finish.
+    description: Maximum time to wait for a print job to finish. On timeout the pending CUPS job is canceled so it cannot resume unexpectedly later.
   cups_job_poll_ms:
     name: CUPS job polling interval, ms
     description: How frequently the active CUPS job state is checked.

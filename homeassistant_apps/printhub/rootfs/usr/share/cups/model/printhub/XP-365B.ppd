@@ -1,6 +1,6 @@
 *PPD-Adobe: "4.3"
 *FormatVersion: "4.3"
-*FileVersion: "2.0"
+*FileVersion: "1.0"
 *LanguageVersion: English
 *LanguageEncoding: ISOLatin1
 *PCFileName: "XP-365B.ppd"
@@ -8,7 +8,7 @@
 *Product: "(XP-365B)"
 *ModelName: "XP-365B"
 *ShortNickName: "XP-365B"
-*NickName: "PrintHub XP-365B TSPL"
+*NickName: "XP-365B"
 *1284DeviceID:"MFG:Xprinter;CMD:TSPL2;MDL:XP-365B;CLS:PRINTER;"
 *PSVersion: "(3010.000) 550"
 *PSVersion: "(3010.000) 651"
@@ -25,8 +25,8 @@
 *LandscapeOrientation: Plus90
 *TTRasterizer: Type42
 *cupsVersion: 1.1
-*cupsManualCopies: True
-*cupsFilter: "application/vnd.cups-pdf 0 printhub-tspl"
+*cupsManualCopies: False
+*cupsFilter: "application/vnd.cups-raster 0 rastertosnailtspl-xprinter"
 *cupsLanguages: "en zh_CN zh_TW"
 *cupsSNMPSupplies:      False
 
